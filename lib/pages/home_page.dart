@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quiz/models/Question.dart';
 import 'package:flutter_quiz/widgets/answer.dart';
+import 'package:flutter_quiz/widgets/progress_bar.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,6 +12,24 @@ class _HomePageState extends State<HomePage> {
   final QuestionData data = QuestionData();
   int _countResult = 0;
   int _questionIndex = 0;
+  List<Icon> _icons = [];
+
+  void _clearState() => setState(() {
+        _questionIndex = 0;
+        _countResult = 0;
+        _icons = [];
+      });
+
+  void _onChangeAnswer(bool isCorrect) => setState(() {
+        if (isCorrect) {
+          _icons.add(Icon(Icons.brightness_1, color: Color(0xFFBD27FF)));
+          _countResult++;
+        } else {
+          _icons.add(Icon(Icons.brightness_1, color: Color(0xFF000000)));
+        }
+
+        _questionIndex++;
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +46,11 @@ class _HomePageState extends State<HomePage> {
         ),
         child: Column(
           children: <Widget>[
+            ProgressBar(
+              icons: _icons,
+              count: _questionIndex,
+              total: data.questions.length,
+            ),
             Container(
               padding: const EdgeInsets.all(10.0),
               child: Text(
@@ -37,12 +61,10 @@ class _HomePageState extends State<HomePage> {
             ...data.questions[_questionIndex].answers
                 .map((value) => Answer(
                       title: value['answer'],
+                      isCorrect: value.containsKey('isCorrect') ? true : false,
+                      onChangeAnswer: _onChangeAnswer,
                     ))
                 .toList(),
-            RaisedButton(
-              onPressed: () => setState(() => _questionIndex++),
-              child: Text('Next'),
-            ),
           ],
         ),
       ),

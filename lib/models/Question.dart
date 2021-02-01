@@ -66,6 +66,24 @@ class QuestionData {
         },
       ],
     ),
+    Question(
+      title: 'Questin 4',
+      answers: [
+        {
+          'answer': 'Answer 4.1',
+        },
+        {
+          'answer': 'Answer 4.2',
+        },
+        {
+          'answer': 'Answer 4.3',
+        },
+        {
+          'answer': 'Answer 4.4',
+          'isCorrect': 1,
+        },
+      ],
+    ),
   ];
 
   List<Question> get questions => [..._data];
